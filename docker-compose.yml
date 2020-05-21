@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+    app:
+        container_name: string-builder-php
+        image: string-builder-php
+        build:
+            context: .
+            dockerfile: .docker/app/Dockerfile
+        volumes:
+            - .:/php/src/string-builder
