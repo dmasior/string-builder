@@ -128,7 +128,7 @@ class Builder
         $length   = $this->length();
         $reversed = '';
         while ($length-- > 0) {
-            $reversed .= mb_substr($this->str, $length, 1, );
+            $reversed .= $this->charAt($length);
         }
 
         $this->str = $reversed;
