@@ -4,6 +4,7 @@ namespace Dmasior\Tests;
 
 use Dmasior\StringBuilder\Builder;
 use Dmasior\StringBuilder\Exception\IndexOutOfBoundsException;
+use Dmasior\StringBuilder\Exception\StringIndexOutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
 class UtilsTest extends TestCase
@@ -115,5 +116,122 @@ class UtilsTest extends TestCase
         $this->expectDeprecationMessage('Start must not be greater than end');
 
         $builder->substring(2, 1);
+    }
+
+    /**
+     * @test
+     */
+    public function charAt(): void
+    {
+        $builder = new Builder('123');
+
+        $this->assertSame('2', $builder->charAt(1));
+    }
+
+    /**
+     * @test
+     */
+    public function charAtIndexMustBeLowerThanLength(): void
+    {
+        $builder = new Builder('123');
+
+        $this->expectException(IndexOutOfBoundsException::class);
+        $this->expectDeprecationMessage('Index must be lower than length');
+
+        $builder->charAt(3);
+    }
+
+    /**
+     * @test
+     */
+    public function codePointAt(): void
+    {
+        $builder = new Builder('PHP');
+
+        $this->assertSame(72, $builder->codePointAt(1));
+    }
+
+    /**
+     * @test
+     */
+    public function codePointBefore(): void
+    {
+        $builder = new Builder('PHP');
+
+        $this->assertSame(80, $builder->codePointBefore(1));
+    }
+
+    /**
+     * @test
+     */
+    public function delete(): void
+    {
+        $builder = new Builder('1234567890');
+
+        $builder->delete(1, 1);
+        $builder->delete(5, 10);
+
+        $this->assertSame('2345', $builder->toString());
+    }
+
+    /**
+     * @test
+     */
+    public function deleteStartMustNotBeNegative(): void
+    {
+        $builder = new Builder('1234567890');
+
+        $this->expectException(StringIndexOutOfBoundsException::class);
+        $this->expectExceptionMessage('Start must not be negative');
+
+        $builder->delete(-1, 1);
+    }
+
+    /**
+     * @test
+     */
+    public function deleteStartMustNotBeGreaterThanLength(): void
+    {
+        $builder = new Builder('1234');
+
+        $this->expectException(StringIndexOutOfBoundsException::class);
+        $this->expectExceptionMessage('Start must not be greater than length');
+
+        $builder->delete(5, 6);
+    }
+
+    /**
+     * @test
+     */
+    public function deleteStartMustNotBeGreaterThanEnd(): void
+    {
+        $builder = new Builder('1234');
+
+        $this->expectException(StringIndexOutOfBoundsException::class);
+        $this->expectExceptionMessage('Start must not be greater than end');
+
+        $builder->delete(3, 2);
+    }
+
+    /**
+     * @test
+     */
+    public function deleteCharAt(): void
+    {
+        $builder = new Builder('12345');
+
+        $builder->deleteCharAt(5);
+
+        $this->assertSame('1234', $builder->toString());
+    }
+
+    /**
+     * @test
+     */
+    public function indexOf(): void
+    {
+        $builder = new Builder('123abc123abc');
+
+        $this->assertSame(0, $builder->indexOf('123'));
     }
 }

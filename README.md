@@ -11,10 +11,10 @@ $ composer require dmasior/string-builder
 ```php
 use Dmasior\StringBuilder\Builder;
 
-// new instance via new
+// via new
 $builder = new Builder('Hi!');
 
-// new instance via create method
+// via create method
 $builder = Builder::create('Hi!');
 ```
 #### Append
@@ -30,6 +30,26 @@ $builder->insert(0, 'Hello')
     ->insert(5, ' world');
 
 $builder->toString(); // "Hello world"
+```
+#### Delete
+```php
+$builder->append('1234567')
+    ->delete(5, 7);
+
+$builder->toString(); // "1234"
+```
+#### DeleteCharAt
+```php
+$builder->append('12345')
+    ->deleteCharAt(5);
+
+$builder->toString(); // "1234"
+```
+#### IndexOf
+```php
+$builder->append('123abc123abc');
+
+$builder->lastIndexOf('123'); // 0
 ```
 #### LastIndexOf
 ```php
@@ -52,4 +72,19 @@ $builder->append('1234')
 ```php
 $builder->append('012345')
     ->substring(1, 3); // "123"
+```
+#### CharAt
+```php
+$builder->append('123')
+    ->charAt(1); // "2"
+```
+#### CodePointAt
+```php
+$builder->append('ABC')
+    ->codePointAt(1); // "66"
+```
+#### CodePointBefore
+```php
+$builder->append('ABC')
+    ->codePointAt(1); // "65"
 ```

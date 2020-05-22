@@ -3,6 +3,7 @@
 namespace Dmasior\StringBuilder;
 
 use Dmasior\StringBuilder\Exception\IndexOutOfBoundsException;
+use Dmasior\StringBuilder\Exception\StringIndexOutOfBoundsException;
 use IntlChar;
 use function mb_strlen;
 use function mb_substr;
@@ -100,12 +101,24 @@ class Builder
 
     /**
      * @param string|mixed $str
-     * @param int $offset
+     * @param int $fromIndex
      * @return int
      */
-    public function lastIndexOf($str, int $offset = 0): int
+    public function lastIndexOf($str, int $fromIndex = 0): int
     {
-        $pos = mb_strrpos($this->str, (string)$str, $offset);
+        $pos = mb_strrpos($this->str, (string)$str, $fromIndex);
+
+        return $pos !== false ? $pos : -1;
+    }
+
+    /**
+     * @param string|mixed $str
+     * @param int $fromIndex
+     * @return int
+     */
+    public function indexOf($str, int $fromIndex = 0): int
+    {
+        $pos = mb_strpos($this->str, (string)$str, $fromIndex);
 
         return $pos !== false ? $pos : -1;
     }
@@ -143,5 +156,55 @@ class Builder
         }
 
         return mb_substr($this->str, $start, $end - $start);
+    }
+
+    public function charAt(int $index): string
+    {
+        if ($index >= $this->length()) {
+            throw new IndexOutOfBoundsException('Index must be lower than length');
+        }
+
+        return \mb_substr($this->str, $index, 1);
+    }
+
+    public function codePointAt(int $index): int
+    {
+        $char = $this->charAt($index);
+
+        return IntlChar::ord($char);
+    }
+
+    public function codePointBefore(int $int): int
+    {
+        return $this->codePointAt($int - 1);
+    }
+
+    public function delete(int $start, int $end): self
+    {
+        if ($start < 0) {
+            throw new StringIndexOutOfBoundsException('Start must not be negative');
+        }
+
+        if ($start > $this->length()) {
+            throw new StringIndexOutOfBoundsException('Start must not be greater than length');
+        }
+
+        if ($start > $end) {
+            throw new StringIndexOutOfBoundsException('Start must not be greater than end');
+        }
+
+        $pre = mb_substr($this->str, 0, $start-1);
+        $post = mb_substr($this->str, $end);
+
+        $this->str = $pre . $post;
+
+        return $this;
+    }
+
+    public function deleteCharAt(int $index): self
+    {
+        $this->delete($index, $index);
+
+        return $this;
     }
 }
