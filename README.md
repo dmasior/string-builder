@@ -1,4 +1,4 @@
-## PHP StringBuilder
+## StringBuilder for PHP
 [![Build Status](https://travis-ci.org/dmasior/string-builder.svg?branch=master)](https://travis-ci.org/dmasior/string-builder)
 ### Requirements
 - PHP 7.2+ with mbstring and intl extensions
