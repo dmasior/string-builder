@@ -47,9 +47,9 @@ class UtilsTest extends TestCase
      */
     public function substring(): void
     {
-        $builder = new Builder('1234567890');
+        $builder = new Builder('0123456789');
 
-        $this->assertSame('345678', $builder->substring(2, 8));
+        $this->assertSame('123', $builder->substring(1, 4));
     }
 
     /**

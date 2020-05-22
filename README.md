@@ -5,30 +5,29 @@
 $ composer require dmasior/string-builder
 ```
 ### Usage
-Via new
+#### Instantiation
 ```php
 use Dmasior\StringBuilder\Builder;
 
-$builder = new Builder('Hello');
-$builder->append(' world');
+// new instance via new
+$builder = new Builder('Hi!');
 
-$builder->toString(); // "Hello world"
+// new instance via create method
+$builder = Builder::create('Hi!');
 ```
-Via create method
+#### Append
 ```php
-use Dmasior\StringBuilder\Builder;
-
-$builder = Builder::create('Hello')
+$builder->append('Hello')
     ->append(' world');
 
 $builder->toString(); // "Hello world"
 ```
 #### Insert
 ```php
-$builder->insert(0, '123')
-    ->insert(3, '456');
+$builder->insert(0, 'Hello')
+    ->insert(5, ' world');
 
-$builder->toString(); // "123456"
+$builder->toString(); // "Hello world"
 ```
 #### LastIndexOf
 ```php
@@ -38,8 +37,17 @@ $builder->lastIndexOf('123'); // 6
 ```
 #### Reverse
 ```php
-$builder->append('4321');
-
-$builder->reverse()
+$builder->append('4321')
+    ->reverse()
     ->toString(); // "1234"
+```
+#### Length
+```php
+$builder->append('1234')
+    ->length(); // 4
+```
+#### Substring
+```php
+$builder->append('012345')
+    ->substring(1, 3); // "123"
 ```

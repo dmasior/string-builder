@@ -23,7 +23,11 @@ class Builder
         $this->insert(0, $str);
     }
 
-    public function create($str = '')
+    /**
+     * @param string|mixed $str
+     * @return self
+     */
+    public function create($str = ''): self
     {
         return new self($str);
     }
