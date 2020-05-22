@@ -49,7 +49,7 @@ $builder->toString(); // "1234"
 ```php
 $builder->append('123abc123abc');
 
-$builder->lastIndexOf('123'); // 0
+$builder->indexOf('123'); // 0
 ```
 #### LastIndexOf
 ```php
