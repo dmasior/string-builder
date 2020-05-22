@@ -1,5 +1,5 @@
 {
-    "name": "initx/string-builder",
+    "name": "dmasior/string-builder",
     "description": "PHP StringBuilder Port",
     "type": "library",
     "license": "MIT",
@@ -13,12 +13,12 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Initx\\": "src/"
+            "Dmasior\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Initx\\Tests\\": "tests/"
+            "Dmasior\\Tests\\": "tests/"
         }
     },
     "require": {

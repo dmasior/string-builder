@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Initx\StringBuilder;
+namespace Dmasior\StringBuilder;
 
-use Initx\StringBuilder\Exception\IndexOutOfBoundsException;
+use Dmasior\StringBuilder\Exception\IndexOutOfBoundsException;
 use IntlChar;
 use function mb_strlen;
 use function mb_substr;

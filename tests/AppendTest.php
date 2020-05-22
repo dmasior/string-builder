@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Initx\Tests;
+namespace Dmasior\Tests;
 
-use Initx\StringBuilder\Builder;
+use Dmasior\StringBuilder\Builder;
 use PHPUnit\Framework\TestCase;
 
 class AppendTest extends TestCase

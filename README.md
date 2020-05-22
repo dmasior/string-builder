@@ -7,11 +7,12 @@ $ composer require [..]
 ### Usage
 #### Append
 ```php
-use Initx\StringBuilder\Builder;
+use Dmasior\StringBuilder\Builder;
 
-$builder = new Builder('Hello ');
+$builder = new Builder();
 
-$builder->append(" world");
+$builder->append('Hello')
+    ->append(' world');
 
 $builder->toString(); // Hello world
 ```
