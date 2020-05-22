@@ -1,6 +1,6 @@
 {
     "name": "dmasior/string-builder",
-    "description": "PHP StringBuilder Port",
+    "description": "StringBuilder for PHP",
     "type": "library",
     "license": "MIT",
     "authors": [
