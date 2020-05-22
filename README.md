@@ -89,5 +89,5 @@ $builder->append('ABC')
 #### CodePointBefore
 ```php
 $builder->append('ABC')
-    ->codePointAt(1); // "65"
+    ->codePointBefore(1); // "65"
 ```
