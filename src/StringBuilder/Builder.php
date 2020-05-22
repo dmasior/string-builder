@@ -125,9 +125,11 @@ class Builder
 
     public function reverse(): self
     {
-        $length   = $this->length();
+        $length = $this->length();
         $reversed = '';
-        while ($length-- > 0) {
+
+        while ($length) {
+            --$length;
             $reversed .= $this->charAt($length);
         }
 

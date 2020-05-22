@@ -24,18 +24,6 @@ class UtilsTest extends TestCase
     /**
      * @test
      */
-    public function reverse(): void
-    {
-        $builder = new Builder('12345ABC');
-
-        $builder->reverse();
-
-        $this->assertSame('CBA54321', $builder->toString());
-    }
-
-    /**
-     * @test
-     */
     public function length(): void
     {
         $builder = new Builder('1234567890');
