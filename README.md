@@ -1,5 +1,7 @@
 ## PHP StringBuilder
 #### Port of Java StringBuilder
+### Requirements
+- PHP 7.2+ with mbstring and intl extensions
 ### Installation
 ```bash
 $ composer require dmasior/string-builder
