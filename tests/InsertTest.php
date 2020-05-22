@@ -15,8 +15,8 @@ class InsertTest extends TestCase
     {
         $builder = new Builder();
 
-        $builder->insert(0, '1234');
-        $builder->insert(4, '5678');
+        $builder->insert(0, '1234')
+            ->insert(4, '5678');
 
         $this->assertSame('12345678', $builder->toString());
     }
