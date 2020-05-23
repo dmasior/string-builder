@@ -1,4 +1,3 @@
 /.docker export-ignore
-/tests export-ignore
 /.gitignore export-ignore
 /docker-compose.yml export-ignore
