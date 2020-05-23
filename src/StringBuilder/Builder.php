@@ -19,6 +19,11 @@ class Builder
     private $str = '';
 
     /**
+     * @var int
+     */
+    private $length = 0;
+
+    /**
      * @param string|mixed $str
      */
     public function __construct($str = '')
@@ -93,6 +98,8 @@ class Builder
 
         $this->str = $pre . $str . $post;
 
+        $this->calcLength();
+
         return $this;
     }
 
@@ -140,9 +147,14 @@ class Builder
         return $this;
     }
 
+    private function calcLength(): void
+    {
+        $this->length = mb_strlen($this->str);
+    }
+
     public function length(): int
     {
-        return mb_strlen($this->str);
+        return $this->length;
     }
 
     public function substring(int $start, int $end): string
@@ -207,6 +219,8 @@ class Builder
         $post = mb_substr($this->str, $end);
 
         $this->str = $pre . $post;
+
+        $this->calcLength();
 
         return $this;
     }

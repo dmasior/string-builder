@@ -33,6 +33,11 @@
         "slevomat/coding-standard": "^6.3"
     },
     "scripts": {
+        "quality": [
+            "@test",
+            "@codestyle",
+            "@phpstan"
+        ],
         "test": "vendor/bin/phpunit",
         "codestyle": [
             "@phpcbf",
