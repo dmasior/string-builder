@@ -18,5 +18,5 @@ install:
     - travis_retry composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
 
 script:
-    - vendor/bin/phpunit
-    - vendor/bin/phpstan analyse -l 8 src tests
+    - composer phpcs
+    - composer phpstan

@@ -31,5 +31,15 @@
         "squizlabs/php_codesniffer": "^3.5",
         "phpstan/phpstan": "^0.12.25",
         "slevomat/coding-standard": "^6.3"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "codestyle": [
+            "@phpcbf",
+            "@phpcs"
+        ],
+        "phpcs": "vendor/bin/phpcs --standard=ruleset.xml src tests",
+        "phpcbf": "vendor/bin/phpcbf --standard=ruleset.xml src tests",
+        "phpstan": "vendor/bin/phpstan analyse -l 8 src tests"
     }
 }

@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Dmasior\StringBuilder;
 
 use Dmasior\StringBuilder\Exception\IndexOutOfBoundsException;
 use Dmasior\StringBuilder\Exception\StringIndexOutOfBoundsException;
 use IntlChar;
+
 use function mb_strlen;
 use function mb_substr;
-use function strrev;
 
 class Builder
 {
@@ -34,7 +36,7 @@ class Builder
     }
 
     /**
-     * @param mixed $str
+     * @param string|mixed $str
      * @param int|null $start
      * @param int|null $end
      * @return self
@@ -172,7 +174,7 @@ class Builder
             throw new IndexOutOfBoundsException('Index must be lower than length');
         }
 
-        return \mb_substr($this->str, $index, 1);
+        return mb_substr($this->str, $index, 1);
     }
 
     public function codePointAt(int $index): int
@@ -201,7 +203,7 @@ class Builder
             throw new StringIndexOutOfBoundsException('Start must not be greater than end');
         }
 
-        $pre = mb_substr($this->str, 0, $start-1);
+        $pre = mb_substr($this->str, 0, $start - 1);
         $post = mb_substr($this->str, $end);
 
         $this->str = $pre . $post;
