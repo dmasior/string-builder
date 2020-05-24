@@ -1,11 +1,15 @@
-## StringBuilder for PHP
+## 👷StringBuilder for PHP
 [![Build Status](https://travis-ci.org/dmasior/string-builder.svg?branch=master)](https://travis-ci.org/dmasior/string-builder)
 
 Mutations over sequence of characters.
 
 ### Requirements
-- PHP 7.2+ with mbstring and intl extensions
-### Installation
+- PHP 7.2+
+
+Suggestions
+- ext-mbstring for multibyte support
+- ext-intl for char <-> codePoint calculation
+#### Installation
 ```bash
 $ composer require dmasior/string-builder
 ```
@@ -14,11 +18,16 @@ $ composer require dmasior/string-builder
 ```php
 use Dmasior\StringBuilder\Builder;
 
-// via new
+// Via new
 $builder = new Builder('Hi!');
 
-// via create method
+// Via create method
 $builder = Builder::create('Hi!');
+
+// Second argument of constructor defines multibyte support
+$builder = new Builder('Hi!', false);
+// or
+$builder = Builder::createNonMultibyte('Hi!');
 ```
 #### Append
 ```php
@@ -76,6 +85,8 @@ $builder->append('1234')
 $builder->append('012345')
     ->substring(1, 3); // "123"
 ```
+
+Following functions: **charAt**, **codePointAt** and **codePointBefore** requires PHP **intl** extension
 #### CharAt
 ```php
 $builder->append('123')

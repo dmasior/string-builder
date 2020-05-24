@@ -6,10 +6,6 @@ namespace Dmasior\StringBuilder;
 
 use Dmasior\StringBuilder\Exception\IndexOutOfBoundsException;
 use Dmasior\StringBuilder\Exception\StringIndexOutOfBoundsException;
-use IntlChar;
-
-use function mb_strlen;
-use function mb_substr;
 
 class Builder
 {
@@ -24,11 +20,18 @@ class Builder
     private $length = 0;
 
     /**
-     * @param string|mixed $str
+     * @var bool
      */
-    public function __construct($str = '')
+    private $isMultibyte;
+
+    /**
+     * @param string|mixed $str
+     * @param bool $isMultibyte
+     */
+    public function __construct($str = '', bool $isMultibyte = true)
     {
         $this->insert(0, $str);
+        $this->isMultibyte = $isMultibyte;
     }
 
     /**
@@ -42,20 +45,29 @@ class Builder
 
     /**
      * @param string|mixed $str
+     * @return self
+     */
+    public function createNonMultibyte($str = ''): self
+    {
+        return new self($str, false);
+    }
+
+    /**
+     * @param string|mixed $str
      * @param int|null $start
      * @param int|null $end
      * @return self
      */
     public function append($str, ?int $start = null, ?int $end = null): self
     {
-        $this->insert(mb_strlen($this->str), $str, $start, $end);
+        $this->insert($this->length(), $str, $start, $end);
 
         return $this;
     }
 
     public function appendCodePoint(int $codePoint): self
     {
-        $this->append(IntlChar::chr($codePoint));
+        $this->append(\IntlChar::chr($codePoint));
 
         return $this;
     }
@@ -87,18 +99,18 @@ class Builder
 
         $str = (string)$str;
 
-        if ($end > mb_strlen($str)) {
+        if ($end > $this->calcLength($str)) {
             throw new IndexOutOfBoundsException('End must not be greater than str length');
         }
 
-        $str = mb_substr($str, $start, $len);
+        $str = $this->substr($str, $start, $len);
 
-        $pre = mb_substr($this->str, 0, $offset);
-        $post = mb_substr($this->str, $offset);
+        $pre = $this->substr($this->str, 0, $offset);
+        $post = $this->substr($this->str, $offset);
 
         $this->str = $pre . $str . $post;
 
-        $this->calcLength();
+        $this->length = $this->calcLength($this->str);
 
         return $this;
     }
@@ -147,11 +159,6 @@ class Builder
         return $this;
     }
 
-    private function calcLength(): void
-    {
-        $this->length = mb_strlen($this->str);
-    }
-
     public function length(): int
     {
         return $this->length;
@@ -177,7 +184,7 @@ class Builder
             throw new IndexOutOfBoundsException('Start must not be greater than end');
         }
 
-        return mb_substr($this->str, $start, $end - $start);
+        return $this->substr($this->str, $start, $end - $start);
     }
 
     public function charAt(int $index): string
@@ -186,14 +193,14 @@ class Builder
             throw new IndexOutOfBoundsException('Index must be lower than length');
         }
 
-        return mb_substr($this->str, $index, 1);
+        return $this->substr($this->str, $index, 1);
     }
 
     public function codePointAt(int $index): int
     {
         $char = $this->charAt($index);
 
-        return IntlChar::ord($char);
+        return \IntlChar::ord($char);
     }
 
     public function codePointBefore(int $int): int
@@ -215,12 +222,12 @@ class Builder
             throw new StringIndexOutOfBoundsException('Start must not be greater than end');
         }
 
-        $pre = mb_substr($this->str, 0, $start - 1);
-        $post = mb_substr($this->str, $end);
+        $pre = $this->substr($this->str, 0, $start - 1);
+        $post = $this->substr($this->str, $end);
 
         $this->str = $pre . $post;
 
-        $this->calcLength();
+        $this->length = $this->calcLength($this->str);
 
         return $this;
     }
@@ -230,5 +237,28 @@ class Builder
         $this->delete($index, $index);
 
         return $this;
+    }
+
+    private function calcLength(string $str): int
+    {
+        if ($this->isMultibyte) {
+            return \mb_strlen($str);
+        }
+
+        return strlen($str);
+    }
+
+    private function substr(string $str, int $start, ?int $length = null): string
+    {
+        if ($this->isMultibyte) {
+            return \mb_substr($str, $start, $length);
+        }
+
+        // this is required because of substr inconsistency regarding last parameter $length
+        if ($length !== null) {
+            return \substr($str, $start, $length) ?: '';
+        }
+
+        return \substr($str, $start) ?: '';
     }
 }
