@@ -1,9 +1,9 @@
-## 👷StringBuilder for PHP
+## 👷 StringBuilder for PHP
 [![Build Status](https://travis-ci.org/dmasior/string-builder.svg?branch=master)](https://travis-ci.org/dmasior/string-builder)
 
 Mutations over sequence of characters.
 
-### Requirements
+### ✔️ Requirements
 - PHP 7.2+
 
 Suggestions
@@ -13,7 +13,7 @@ Suggestions
 ```bash
 $ composer require dmasior/string-builder
 ```
-### Usage
+### ⌨️ Usage
 #### Instantiation
 ```php
 use Dmasior\StringBuilder\Builder;
