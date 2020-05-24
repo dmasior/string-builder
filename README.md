@@ -24,7 +24,8 @@ $builder = new Builder('Hi!');
 // Via create method
 $builder = Builder::create('Hi!');
 
-// Second argument of constructor defines multibyte support
+// Second argument of constructor defines if multibyte character encoding is required.
+// Set it to false when no need to support mb characters ☻ ♥
 $builder = new Builder('Hi!', false);
 // or
 $builder = Builder::createNonMultibyte('Hi!');
