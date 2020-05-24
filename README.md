@@ -87,7 +87,7 @@ $builder->append('012345')
     ->substring(1, 3); // "123"
 ```
 
-Following functions: **charAt**, **codePointAt** and **codePointBefore** requires PHP **intl** extension
+ℹ️ Following functions: **charAt**, **codePointAt** and **codePointBefore** requires PHP **intl** extension
 #### CharAt
 ```php
 $builder->append('123')
