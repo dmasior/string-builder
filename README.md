@@ -20,7 +20,7 @@ use Dmasior\StringBuilder\Builder;
 // Via new
 $builder = new Builder('Hi!');
 
-// Via factory
+// Via create method
 $builder = Builder::create('Hi!');
 ```
 #### Append
