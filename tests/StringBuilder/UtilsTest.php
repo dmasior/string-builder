@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dmasior\Tests;
+namespace Dmasior\Tests\StringBuilder;
 
 use Dmasior\StringBuilder\Builder;
 use Dmasior\StringBuilder\Exception\IndexOutOfBoundsException;
