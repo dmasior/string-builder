@@ -8,7 +8,6 @@ Mutations over sequence of characters.
 
 Suggestions
 - ext-mbstring for multibyte support
-- ext-intl for codePoint calculation
 #### Installation
 ```bash
 $ composer require dmasior/string-builder
@@ -21,7 +20,7 @@ use Dmasior\StringBuilder\Builder;
 // Via new
 $builder = new Builder('Hi!');
 
-// Via create method
+// Via factory
 $builder = Builder::create('Hi!');
 
 // Second argument of constructor defines if multibyte character encoding is required.
@@ -92,14 +91,3 @@ $builder->append('123')
     ->charAt(1); // "2"
 ```
 
-ℹ️ Functions: **codePointAt** and **codePointBefore** require PHP **intl** extension
-#### CodePointAt
-```php
-$builder->append('ABC')
-    ->codePointAt(1); // "66"
-```
-#### CodePointBefore
-```php
-$builder->append('ABC')
-    ->codePointBefore(1); // "65"
-```

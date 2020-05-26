@@ -134,26 +134,6 @@ class UtilsTest extends TestCase
     /**
      * @test
      */
-    public function codePointAt(): void
-    {
-        $builder = new Builder('PHP');
-
-        $this->assertSame(72, $builder->codePointAt(1));
-    }
-
-    /**
-     * @test
-     */
-    public function codePointBefore(): void
-    {
-        $builder = new Builder('PHP');
-
-        $this->assertSame(80, $builder->codePointBefore(1));
-    }
-
-    /**
-     * @test
-     */
     public function delete(): void
     {
         $builder = new Builder('1234567890');

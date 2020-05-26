@@ -6,6 +6,9 @@ namespace Dmasior\StringBuilder;
 
 use Dmasior\StringBuilder\Exception\IndexOutOfBoundsException;
 use Dmasior\StringBuilder\Exception\StringIndexOutOfBoundsException;
+use Dmasior\StringBuilder\Processor\MultibyteStringProcessor;
+use Dmasior\StringBuilder\Processor\NonMultibyteStringProcessor;
+use Dmasior\StringBuilder\Processor\StringProcessorInterface;
 
 class Builder
 {
@@ -20,36 +23,35 @@ class Builder
     private $length = 0;
 
     /**
-     * @var bool
+     * @var StringProcessorInterface
      */
-    private $isMultibyte;
+    private $processor;
 
     /**
      * @param string|mixed $str
-     * @param bool $isMultibyte
+     * @param StringProcessorInterface|null $processor
      */
-    public function __construct($str = '', bool $isMultibyte = true)
+    public function __construct($str = '', ?StringProcessorInterface $processor = null)
     {
+        if ($processor === null) {
+            if (extension_loaded('mbstring')) {
+                $processor = new MultibyteStringProcessor();
+            } else {
+                $processor = new NonMultibyteStringProcessor();
+            }
+        }
+        $this->processor = $processor;
         $this->insert(0, $str);
-        $this->isMultibyte = $isMultibyte;
     }
 
     /**
      * @param string|mixed $str
+     * @param StringProcessorInterface|null $processor
      * @return self
      */
-    public function create($str = ''): self
+    public static function create($str = '', ?StringProcessorInterface $processor = null): self
     {
-        return new self($str);
-    }
-
-    /**
-     * @param string|mixed $str
-     * @return self
-     */
-    public function createNonMultibyte($str = ''): self
-    {
-        return new self($str, false);
+        return new self($str, $processor);
     }
 
     /**
@@ -61,13 +63,6 @@ class Builder
     public function append($str, ?int $start = null, ?int $end = null): self
     {
         $this->insert($this->length(), $str, $start, $end);
-
-        return $this;
-    }
-
-    public function appendCodePoint(int $codePoint): self
-    {
-        $this->append(\IntlChar::chr($codePoint));
 
         return $this;
     }
@@ -99,18 +94,18 @@ class Builder
 
         $str = (string)$str;
 
-        if ($end > $this->calcLength($str)) {
+        if ($end > $this->processor->strLen($str)) {
             throw new IndexOutOfBoundsException('End must not be greater than str length');
         }
 
-        $str = $this->substr($str, $start, $len);
+        $str = $this->processor->substr($str, $start, $len);
 
-        $pre = $this->substr($this->str, 0, $offset);
-        $post = $this->substr($this->str, $offset);
+        $pre = $this->processor->substr($this->str, 0, $offset);
+        $post = $this->processor->substr($this->str, $offset);
 
         $this->str = $pre . $str . $post;
 
-        $this->length = $this->calcLength($this->str);
+        $this->length = $this->processor->strLen($this->str);
 
         return $this;
     }
@@ -127,9 +122,7 @@ class Builder
      */
     public function lastIndexOf($str, int $fromIndex = 0): int
     {
-        $pos = mb_strrpos($this->str, (string)$str, $fromIndex);
-
-        return $pos !== false ? $pos : -1;
+        return $this->processor->strRevPos($this->str, (string)$str, $fromIndex);
     }
 
     /**
@@ -139,9 +132,7 @@ class Builder
      */
     public function indexOf($str, int $fromIndex = 0): int
     {
-        $pos = mb_strpos($this->str, (string)$str, $fromIndex);
-
-        return $pos !== false ? $pos : -1;
+        return $this->processor->strPos($this->str, (string)$str, $fromIndex);
     }
 
     public function reverse(): self
@@ -184,7 +175,7 @@ class Builder
             throw new IndexOutOfBoundsException('Start must not be greater than end');
         }
 
-        return $this->substr($this->str, $start, $end - $start);
+        return $this->processor->substr($this->str, $start, $end - $start);
     }
 
     public function charAt(int $index): string
@@ -193,19 +184,7 @@ class Builder
             throw new IndexOutOfBoundsException('Index must be lower than length');
         }
 
-        return $this->substr($this->str, $index, 1);
-    }
-
-    public function codePointAt(int $index): int
-    {
-        $char = $this->charAt($index);
-
-        return \IntlChar::ord($char);
-    }
-
-    public function codePointBefore(int $int): int
-    {
-        return $this->codePointAt($int - 1);
+        return $this->processor->substr($this->str, $index, 1);
     }
 
     public function delete(int $start, int $end): self
@@ -222,12 +201,12 @@ class Builder
             throw new StringIndexOutOfBoundsException('Start must not be greater than end');
         }
 
-        $pre = $this->substr($this->str, 0, $start - 1);
-        $post = $this->substr($this->str, $end);
+        $pre = $this->processor->substr($this->str, 0, $start - 1);
+        $post = $this->processor->substr($this->str, $end);
 
         $this->str = $pre . $post;
 
-        $this->length = $this->calcLength($this->str);
+        $this->length = $this->processor->strLen($this->str);
 
         return $this;
     }
@@ -237,28 +216,5 @@ class Builder
         $this->delete($index, $index);
 
         return $this;
-    }
-
-    private function calcLength(string $str): int
-    {
-        if ($this->isMultibyte) {
-            return \mb_strlen($str);
-        }
-
-        return strlen($str);
-    }
-
-    private function substr(string $str, int $start, ?int $length = null): string
-    {
-        if ($this->isMultibyte) {
-            return \mb_substr($str, $start, $length);
-        }
-
-        // this is required because of substr inconsistency regarding last parameter $length
-        if ($length !== null) {
-            return \substr($str, $start, $length) ?: '';
-        }
-
-        return \substr($str, $start) ?: '';
     }
 }
