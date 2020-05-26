@@ -23,6 +23,11 @@ class Builder
     private $length = 0;
 
     /**
+     * @var bool
+     */
+    private $lengthInvalidated = false;
+
+    /**
      * @var StringProcessorInterface
      */
     private $processor;
@@ -105,7 +110,7 @@ class Builder
 
         $this->str = $pre . $str . $post;
 
-        $this->length = $this->processor->strLen($this->str);
+        $this->lengthInvalidated = true;
 
         return $this;
     }
@@ -152,6 +157,11 @@ class Builder
 
     public function length(): int
     {
+        if ($this->lengthInvalidated) {
+            $this->length = $this->processor->strLen($this->str);
+            $this->lengthInvalidated = false;
+        }
+
         return $this->length;
     }
 
@@ -206,7 +216,7 @@ class Builder
 
         $this->str = $pre . $post;
 
-        $this->length = $this->processor->strLen($this->str);
+        $this->lengthInvalidated = true;
 
         return $this;
     }

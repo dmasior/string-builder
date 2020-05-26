@@ -142,6 +142,7 @@ class UtilsTest extends TestCase
         $builder->delete(5, 10);
 
         $this->assertSame('2345', $builder->toString());
+        $this->assertSame(4, $builder->length());
     }
 
     /**
@@ -193,6 +194,7 @@ class UtilsTest extends TestCase
         $builder->deleteCharAt(5);
 
         $this->assertSame('1234', $builder->toString());
+        $this->assertSame(4, $builder->length());
     }
 
     /**
